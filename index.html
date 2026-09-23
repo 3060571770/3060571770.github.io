@@ -33,12 +33,19 @@ body.locked{overflow:hidden}
 ::selection{background:rgba(201,168,106,.3)}
 
 /* ---------- ambient background ---------- */
-#dust{position:fixed;inset:0;z-index:0;pointer-events:none}
-#dust i{position:absolute;background:#f0dfae;border-radius:50%;animation:mote var(--t) ease-in-out infinite alternate}
-@keyframes mote{
-  from{opacity:.05;transform:translate(0,0)}
-  to{opacity:.75;transform:translate(var(--dx),var(--dy))}
+/* ---------- patterned backdrop: shippo ground (sakura-shaped cutouts) + constellations + blossoms ---------- */
+#patwrap{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.pat-a{
+  position:absolute;inset:0;opacity:.048;background-size:44px 44px;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'><g fill='none' stroke='%23c9a86a' stroke-width='1'><circle cx='22' cy='22' r='22'/><circle cx='0' cy='0' r='22'/><circle cx='44' cy='0' r='22'/><circle cx='0' cy='44' r='22'/><circle cx='44' cy='44' r='22'/></g></svg>");
 }
+.pat-d{position:absolute;inset:0}
+.blossom{position:absolute;font-size:560px;opacity:.17;top:-190px;left:-130px;transform:rotate(14deg);filter:grayscale(.2) sepia(.42) brightness(.66) saturate(1)}
+.blossom.b2{font-size:640px;opacity:.15;top:auto;left:auto;bottom:-210px;right:-150px;transform:rotate(-18deg)}
+.b-core{position:absolute;width:220px;height:220px;border-radius:50%;background:rgba(122,62,76,.48);filter:blur(9px);left:95px;top:255px}
+.b-core.c2{width:270px;height:270px;background:rgba(122,62,76,.5);filter:blur(10px);left:auto;top:auto;right:90px;bottom:20px}
+.petal-frag{position:absolute;background:rgba(201,168,106,.15);border-radius:100% 0 100% 0}
+#pcv{position:fixed;inset:0;z-index:6;pointer-events:none}
 .glow{position:fixed;border-radius:50%;filter:blur(100px);z-index:0;pointer-events:none}
 .g0{width:1900px;height:1050px;top:-470px;left:50%;margin-left:-950px;background:radial-gradient(ellipse at center,rgba(188,126,58,.42),transparent 66%);filter:blur(70px)}
 .g1{width:840px;height:840px;top:-330px;left:-270px;background:radial-gradient(circle,rgba(222,152,66,.50),transparent 70%);animation:drift1 70s ease-in-out infinite alternate}
@@ -274,9 +281,34 @@ body.locked{overflow:hidden}
 </head>
 <body class="locked">
 
-<div id="dust"></div>
 <div class="glow g0"></div><div class="glow g1"></div><div class="glow g2"></div>
 <div class="noise"></div>
+
+<div id="patwrap">
+  <div class="pat-a" id="pat-a"></div>
+  <div class="pat-d">
+    <svg width="100%" height="100%" viewBox="0 0 1680 1050" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <g stroke="rgba(201,168,106,.18)" stroke-width="1" fill="none">
+        <path d="M60 420 L125 380 L185 440 L155 520 L85 500"/>
+        <path d="M1500 250 L1560 210 L1630 265 L1600 340 L1525 320 L1560 210"/>
+        <path d="M1510 620 L1570 580 L1635 635 L1605 710 L1530 690"/>
+      </g>
+      <g fill="rgba(240,223,174,.5)">
+        <circle cx="60" cy="420" r="1.8"/><circle cx="125" cy="380" r="2"/><circle cx="185" cy="440" r="1.7"/><circle cx="155" cy="520" r="2"/><circle cx="85" cy="500" r="1.6"/>
+        <circle cx="1500" cy="250" r="1.9"/><circle cx="1560" cy="210" r="2"/><circle cx="1630" cy="265" r="1.7"/><circle cx="1600" cy="340" r="1.9"/><circle cx="1525" cy="320" r="1.6"/>
+        <circle cx="1510" cy="620" r="1.9"/><circle cx="1570" cy="580" r="1.7"/><circle cx="1635" cy="635" r="2"/><circle cx="1605" cy="710" r="1.8"/><circle cx="1530" cy="690" r="1.6"/>
+      </g>
+      <g fill="rgba(255,240,200,.85)">
+        <circle cx="125" cy="380" r="3.1"/><circle cx="1560" cy="210" r="3.3"/><circle cx="1635" cy="635" r="3"/>
+      </g>
+    </svg>
+  </div>
+  <div class="blossom b1">🌸</div>
+  <div class="blossom b2">🌸</div>
+  <div class="b-core c1"></div>
+  <div class="b-core c2"></div>
+</div>
+<canvas id="pcv"></canvas>
 
 <header class="topbar">
   <div class="topbar-inner">
@@ -336,22 +368,90 @@ const STATUS = {
 const grid = document.getElementById('grid');
 const intro = document.getElementById('intro');
 
-/* ---------- dust motes ---------- */
-(function dust(){
-  const box = document.getElementById('dust');
-  let html = '';
-  for (let i = 0; i < 110; i++) {
-    const big = Math.random() < 0.12;                        // a few brighter motes
-    const x = (Math.random()*100).toFixed(2),
-          y = (Math.random()*100).toFixed(2),
-          s = big ? (Math.random()*1.6+3.0).toFixed(2) : (Math.random()*1.9+0.8).toFixed(2),
-          t = (Math.random()*6+4).toFixed(2),
-          dx = ((Math.random()-0.5)*44).toFixed(0),
-          dy = (-(Math.random()*70+18)).toFixed(0);          // drift slowly upward
-    const glow = big ? 'box-shadow:0 0 6px rgba(240,223,174,.8);' : '';
-    html += `<i style="left:${x}%;top:${y}%;width:${s}px;height:${s}px;${glow}--t:${t}s;--dx:${dx}px;--dy:${dy}px;animation-delay:-${(Math.random()*6).toFixed(2)}s"></i>`;
+/* ---------- patterned backdrop: shippo ground with sakura cutouts + petals ---------- */
+(function backdrop(){
+  const wrap = document.getElementById('patwrap');
+
+  // a few fallen petals, scattered
+  for (let i = 0; i < 16; i++) {
+    const s = 14 + Math.random()*22;
+    const pt = document.createElement('i');
+    pt.className = 'petal-frag';
+    pt.style.cssText = `width:${s.toFixed(0)}px;height:${s.toFixed(0)}px;left:${(Math.random()*100).toFixed(1)}%;top:${(Math.random()*100).toFixed(1)}%;transform:rotate(${(Math.random()*360).toFixed(0)}deg)`;
+    wrap.appendChild(pt);
   }
-  box.innerHTML = html;
+
+  // shippo ground, with the pattern "cut away" wherever a blossom sits
+  const PETALS = ["", "rotate(72)", "rotate(144)", "rotate(216)", "rotate(288)"]
+    .map(t => "<g" + (t ? " transform='" + t + "'" : "") + "><ellipse cx='0' cy='-38' rx='30' ry='40'/></g>").join("");
+  const patA = document.getElementById('pat-a');
+  function applyMask(){
+    const W = innerWidth, H = innerHeight;
+    const g = (x, y, s) => `<g transform='translate(${x} ${y}) scale(${s})' fill='#fff'>${PETALS}<circle r='16'/></g>`;
+    const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${W}' height='${H}'>`
+      + g(205, 365, 3.46) + g(W - 225, H - 155, 3.97) + `</svg>`;
+    const uri = `url("data:image/svg+xml;utf8,${svg}")`;
+    const m = `linear-gradient(#fff, #fff), ${uri}`;
+    patA.style.webkitMaskImage = m;  patA.style.webkitMaskComposite = 'xor';
+    patA.style.maskImage = m;        patA.style.maskComposite = 'exclude';
+    patA.style.webkitMaskRepeat = 'no-repeat'; patA.style.maskRepeat = 'no-repeat';
+  }
+  applyMask();
+  addEventListener('resize', applyMask);
+})();
+
+/* ---------- stardust: drifting motes that link to the cursor ---------- */
+(function stardust(){
+  const cv = document.getElementById('pcv');
+  const ctx = cv.getContext('2d');
+  let W, H; const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  function resize(){
+    W = window.innerWidth; H = window.innerHeight;
+    cv.width = W * DPR; cv.height = H * DPR;
+    cv.style.width = W + 'px'; cv.style.height = H + 'px';
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+  resize(); window.addEventListener('resize', resize);
+  const N = 130, R = 150, P = [];
+  for (let i = 0; i < N; i++) {
+    P.push({ x: Math.random()*W, y: Math.random()*H,
+             vx: (Math.random()-.5)*.16, vy: -(.04 + Math.random()*.14),
+             r: .7 + Math.random()*1.5, b: .22 + Math.random()*.4,
+             big: Math.random() < .1 });
+  }
+  let mx = -9999, my = -9999;
+  window.addEventListener('mousemove', function(e){ mx = e.clientX; my = e.clientY; }, {passive:true});
+  document.addEventListener('mouseleave', function(){ mx = -9999; my = -9999; });
+  (function loop(){
+    ctx.clearRect(0, 0, W, H);
+    for (let i = 0; i < N; i++) {
+      const p = P[i];
+      p.x += p.vx; p.y += p.vy;
+      if (p.y < -12) { p.y = H + 12; p.x = Math.random()*W; }
+      if (p.x < -12) p.x = W + 12;
+      if (p.x > W + 12) p.x = -12;
+      const dx = p.x - mx, dy = p.y - my;
+      const d = Math.sqrt(dx*dx + dy*dy);
+      const near = d < R;
+      const a = Math.min(1, p.b + (near ? (1 - d/R) * .75 : 0));
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.2832);
+      ctx.fillStyle = 'rgba(240,223,174,' + a.toFixed(2) + ')';
+      if (p.big) { ctx.shadowBlur = 8; ctx.shadowColor = 'rgba(240,223,174,.8)'; }
+      ctx.fill(); ctx.shadowBlur = 0;
+      if (near) {
+        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(mx, my);
+        ctx.strokeStyle = 'rgba(240,223,174,' + ((1 - d/R) * .5).toFixed(2) + ')';
+        ctx.lineWidth = .7; ctx.stroke();
+      }
+    }
+    if (mx > -999) {
+      ctx.beginPath(); ctx.arc(mx, my, 2.6, 0, 6.2832);
+      ctx.fillStyle = 'rgba(255,246,220,.9)';
+      ctx.shadowBlur = 16; ctx.shadowColor = 'rgba(255,240,200,.9)';
+      ctx.fill(); ctx.shadowBlur = 0;
+    }
+    requestAnimationFrame(loop);
+  })();
 })();
 
 /* ---------- ambient glows drift with the pointer ---------- */
