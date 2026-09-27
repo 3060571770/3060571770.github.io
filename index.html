@@ -12,44 +12,44 @@
 <style>
 
 :root{
-  --bg:#0b0906;
-  --gold:#c9a86a;
-  --gold-dim:#9a7d4a;
-  --text:#e9dfc8;
-  --text-dim:rgba(233,223,200,.52);
-  --green:#9bb884;
-  --grey:#9a9184;
+  --bg:#0e090a;
+  --gold:#e89aa2;
+  --gold-dim:#b97f8c;
+  --text:#f5e6e4;
+  --text-dim:rgba(245,230,228,.52);
+  --green:#a9c48f;
+  --grey:#ab9a9a;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{
-  background:radial-gradient(1500px 950px at 50% 24%,#2a1b0e 0%,#150e08 55%,#0a0705 100%) fixed #0d0906;
+  background:radial-gradient(1500px 950px at 50% 24%,#2e1a1e 0%,#1a0f12 55%,#0c0708 100%) fixed var(--bg);
   color:var(--text);
   font-family:"LXGW WenKai","LXGW WenKai Screen","Noto Serif SC","Source Han Serif SC","Songti SC",SimSun,serif;
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
 }
 body.locked{overflow:hidden}
-::selection{background:rgba(201,168,106,.3)}
+::selection{background:rgba(232,154,162,.3)}
 
 /* ---------- ambient background ---------- */
 /* ---------- patterned backdrop: shippo ground (sakura-shaped cutouts) + constellations + blossoms ---------- */
 #patwrap{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
 .pat-a{
   position:absolute;inset:0;opacity:.048;background-size:44px 44px;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'><g fill='none' stroke='%23c9a86a' stroke-width='1'><circle cx='22' cy='22' r='22'/><circle cx='0' cy='0' r='22'/><circle cx='44' cy='0' r='22'/><circle cx='0' cy='44' r='22'/><circle cx='44' cy='44' r='22'/></g></svg>");
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'><g fill='none' stroke='%23e89aa2' stroke-width='1'><circle cx='22' cy='22' r='22'/><circle cx='0' cy='0' r='22'/><circle cx='44' cy='0' r='22'/><circle cx='0' cy='44' r='22'/><circle cx='44' cy='44' r='22'/></g></svg>");
 }
 .pat-d{position:absolute;inset:0}
-.blossom{position:absolute;font-size:560px;opacity:.17;top:-190px;left:-130px;transform:rotate(14deg);filter:grayscale(.2) sepia(.42) brightness(.66) saturate(1)}
-.blossom.b2{font-size:640px;opacity:.15;top:auto;left:auto;bottom:-210px;right:-150px;transform:rotate(-18deg)}
-.b-core{position:absolute;width:220px;height:220px;border-radius:50%;background:rgba(122,62,76,.48);filter:blur(9px);left:95px;top:255px}
-.b-core.c2{width:270px;height:270px;background:rgba(122,62,76,.5);filter:blur(10px);left:auto;top:auto;right:90px;bottom:20px}
-.petal-frag{position:absolute;background:rgba(201,168,106,.15);border-radius:100% 0 100% 0}
-#pcv{position:fixed;inset:0;z-index:6;pointer-events:none}
+/* 樱花：要"不显眼"而不是"颜色浅"——颜色回到 v5，只压低透明度 */
+.blossom{position:absolute;font-size:560px;opacity:.12;top:-190px;left:-130px;transform:rotate(14deg);filter:grayscale(.2) sepia(.42) brightness(.66) saturate(1)}
+.blossom.b2{font-size:640px;opacity:.11;top:auto;left:auto;bottom:-210px;right:-150px;transform:rotate(-18deg)}
+.petal-frag{position:absolute;background:rgba(232,154,162,.15);border-radius:100% 0 100% 0}
+/* stardust rides on top of everything (incl. the intro veil) — 有意为之 */
+#pcv{position:fixed;inset:0;z-index:200;pointer-events:none}
 .glow{position:fixed;border-radius:50%;filter:blur(100px);z-index:0;pointer-events:none}
-.g0{width:1900px;height:1050px;top:-470px;left:50%;margin-left:-950px;background:radial-gradient(ellipse at center,rgba(188,126,58,.42),transparent 66%);filter:blur(70px)}
-.g1{width:840px;height:840px;top:-330px;left:-270px;background:radial-gradient(circle,rgba(222,152,66,.50),transparent 70%);animation:drift1 70s ease-in-out infinite alternate}
-.g2{width:740px;height:740px;right:-290px;bottom:-310px;background:radial-gradient(circle,rgba(178,80,40,.40),transparent 70%);animation:drift2 92s ease-in-out infinite alternate}
+.g0{width:1900px;height:1050px;top:-470px;left:50%;margin-left:-950px;background:radial-gradient(ellipse at center,rgba(210,110,120,.42),transparent 66%);filter:blur(70px)}
+.g1{width:840px;height:840px;top:-330px;left:-270px;background:radial-gradient(circle,rgba(232,136,146,.46),transparent 70%);animation:drift1 70s ease-in-out infinite alternate}
+.g2{width:740px;height:740px;right:-290px;bottom:-310px;background:radial-gradient(circle,rgba(196,110,140,.36),transparent 70%);animation:drift2 92s ease-in-out infinite alternate}
 @keyframes drift1{from{transform:translate(0,0)}to{transform:translate(150px,110px)}}
 @keyframes drift2{from{transform:translate(0,0)}to{transform:translate(-160px,-80px)}}
 .noise{
@@ -61,8 +61,8 @@ body.locked{overflow:hidden}
 /* ---------- top bar (solid, no glass) ---------- */
 .topbar{
   position:sticky;top:0;z-index:20;
-  background:linear-gradient(rgba(11,9,6,.97),rgba(11,9,6,.84));
-  border-bottom:1px solid rgba(201,168,106,.16);
+  background:linear-gradient(rgba(14,9,10,.97),rgba(14,9,10,.84));
+  border-bottom:1px solid rgba(232,154,162,.18);
 }
 .topbar-inner{
   max-width:1280px;margin:0 auto;
@@ -71,7 +71,7 @@ body.locked{overflow:hidden}
 }
 .brand .logo{font-size:19px;letter-spacing:.25em;color:var(--text)}
 .brand .logo em{font-style:normal;color:var(--gold)}
-.brand .sub{font-size:9.5px;letter-spacing:.46em;color:rgba(233,223,200,.3);margin-top:5px}
+.brand .sub{font-size:9.5px;letter-spacing:.46em;color:rgba(245,230,228,.3);margin-top:5px}
 .counter{font-size:12px;letter-spacing:.2em;color:var(--text-dim);white-space:nowrap}
 .counter b{color:var(--gold);font-weight:500}
 
@@ -107,7 +107,7 @@ body.locked{overflow:hidden}
 .card{
   position:relative;z-index:1;aspect-ratio:2/3;cursor:default;
   border-radius:0;
-  background:rgba(17,13,9,.65);
+  background:rgba(28,17,19,.65);
   box-shadow:
     0 1px 0 rgba(255,246,228,.14),
     0 3px 0 rgba(255,246,228,.05),
@@ -130,12 +130,26 @@ body.locked{overflow:hidden}
     0 3px 0 rgba(255,246,228,.07),
     0 7px 0 rgba(0,0,0,.3),
     0 30px 56px rgba(0,0,0,.6),
-    0 0 26px rgba(201,168,106,.3),
-    0 0 56px rgba(176,122,255,.18),
-    0 0 88px rgba(255,140,180,.1);
+    0 0 26px rgba(232,154,162,.34),
+    0 0 56px rgba(220,120,160,.22),
+    0 0 88px rgba(255,140,160,.14);
 }
-.view{position:absolute;inset:0;overflow:hidden;background:#0f0b07}
+.view{position:absolute;inset:0;overflow:hidden;background:#0f0a0b}
 .view img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.001);transition:transform .6s cubic-bezier(.2,.7,.2,1),filter .5s}
+/* 封面缺失时的占位砖（Steam 还没出竖版素材时用）—— 设计成一块"待揭幕"的砖，不是破图 */
+.view.nocover{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;padding:16px 12px;
+  background:linear-gradient(155deg,rgba(94,48,56,.85) 0%,rgba(38,22,26,.95) 100%);
+  text-align:center;
+}
+.view.nocover::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120px 150px at 50% 28%,rgba(232,154,162,.20),transparent 72%);
+}
+.view.nocover .nc-mark{font-size:26px;line-height:1;filter:grayscale(.25) sepia(.3) brightness(.85);opacity:.75}
+.view.nocover .nc-zh{position:relative;font-size:14px;letter-spacing:.06em;line-height:1.45;color:rgba(245,230,228,.88)}
+.view.nocover .nc-orig{position:relative;font-size:10px;letter-spacing:.1em;line-height:1.5;color:rgba(245,230,228,.45)}
+.view.nocover .nc-tag{position:relative;margin-top:3px;font-size:8.5px;letter-spacing:.28em;color:rgba(232,154,162,.7)}
 .card:hover .view img{transform:scale(1.04)}
 .view::after{ /* shading under the glass */
   content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
@@ -189,34 +203,34 @@ body.locked{overflow:hidden}
   flex:1;min-width:0;position:relative;
   display:flex;flex-direction:column;justify-content:center;
   padding:24px 42px;
-  background:linear-gradient(150deg,rgba(42,31,18,.5) 0%,rgba(22,16,10,.62) 100%);
+  background:linear-gradient(150deg,rgba(62,34,38,.5) 0%,rgba(28,17,19,.62) 100%);
   box-shadow:
-    inset 0 0 0 1px rgba(255,240,210,.12),
-    inset 0 1px 0 rgba(255,240,210,.18),
+    inset 0 0 0 1px rgba(255,232,228,.12),
+    inset 0 1px 0 rgba(255,232,228,.18),
     0 22px 44px rgba(0,0,0,.42);
 }
 .info::after{ /* soft glass sheen */
   content:"";position:absolute;inset:0;pointer-events:none;
   background:
-    radial-gradient(180px 100px at 0 0,rgba(255,240,210,.07),transparent 72%),
-    linear-gradient(120deg,rgba(255,240,210,.05) 0%,transparent 42%);
+    radial-gradient(180px 100px at 0 0,rgba(255,232,228,.07),transparent 72%),
+    linear-gradient(120deg,rgba(255,232,228,.05) 0%,transparent 42%);
 }
 .info-head{display:flex;align-items:center;justify-content:space-between;gap:22px;margin-bottom:7px}
 .info-head h3{font-size:23px;font-weight:400;letter-spacing:.05em;margin:0;line-height:1.3}
 .badge{padding:3px 12px;border:1px solid;font-size:11.5px;letter-spacing:.2em;flex:none;white-space:nowrap}
-.badge.played{color:var(--gold);border-color:rgba(201,168,106,.5)}
-.badge.playing{color:var(--green);border-color:rgba(155,184,132,.5)}
-.badge.wish{color:var(--grey);border-color:rgba(154,145,132,.5)}
+.badge.played{color:var(--gold);border-color:rgba(232,154,162,.5)}
+.badge.playing{color:var(--green);border-color:rgba(169,196,143,.5)}
+.badge.wish{color:var(--grey);border-color:rgba(171,154,154,.5)}
 .orig{font-size:12.5px;letter-spacing:.1em;color:var(--text-dim);margin:0 0 12px}
 .stars{font-size:14.5px;letter-spacing:.3em;color:var(--gold);margin-bottom:12px}
 .stars .off{color:rgba(255,255,255,.13)}
 .stars .none{font-size:12px;letter-spacing:.22em;color:var(--grey)}
-.note{font-size:14.5px;line-height:1.95;letter-spacing:.02em;color:rgba(233,223,200,.85);margin:0}
+.note{font-size:14.5px;line-height:1.95;letter-spacing:.02em;color:rgba(245,230,228,.85);margin:0}
 
 /* ---------- footer ---------- */
 .foot{
   position:relative;z-index:5;text-align:center;
-  padding:0 0 46px;font-size:10.5px;letter-spacing:.3em;color:rgba(233,223,200,.26);
+  padding:0 0 46px;font-size:10.5px;letter-spacing:.3em;color:rgba(245,230,228,.26);
 }
 
 /* ---------- intro splash (semi-transparent veil) ---------- */
@@ -224,7 +238,7 @@ body.locked{overflow:hidden}
   position:fixed;inset:0;z-index:100;cursor:pointer;overflow:hidden;
   display:flex;align-items:center;justify-content:center;
   background:radial-gradient(860px 560px at 50% 43%,
-    rgba(8,6,4,.92) 0%,rgba(8,6,4,.62) 55%,rgba(9,7,5,.26) 100%);
+    rgba(10,6,7,.92) 0%,rgba(10,6,7,.62) 55%,rgba(11,7,8,.26) 100%);
   transition:opacity .9s ease,visibility .9s;
 }
 #intro.gone{opacity:0;visibility:hidden}
@@ -236,7 +250,7 @@ body.locked{overflow:hidden}
 }
 #intro h1 em{font-style:normal;color:var(--gold)}
 .intro-sub{
-  font-size:13.5px;letter-spacing:.34em;color:rgba(233,223,200,.55);
+  font-size:13.5px;letter-spacing:.34em;color:rgba(245,230,228,.55);
   margin:0 0 68px;text-shadow:0 0 18px rgba(0,0,0,.9);
   opacity:0;animation:fadeUp 1.5s .8s ease forwards;
 }
@@ -247,12 +261,12 @@ body.locked{overflow:hidden}
 .intro-click span{display:inline-block;animation:breathe 2.6s 2.4s ease-in-out infinite}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @keyframes breathe{0%,100%{opacity:.45}50%{opacity:1}}
-.intro-line{width:1px;height:56px;margin:34px auto 30px;background:linear-gradient(transparent,rgba(201,168,106,.55),transparent);opacity:0;animation:fadeUp 1.3s 1.15s ease forwards}
+.intro-line{width:1px;height:56px;margin:34px auto 30px;background:linear-gradient(transparent,rgba(232,154,162,.55),transparent);opacity:0;animation:fadeUp 1.3s 1.15s ease forwards}
 .sweep{
   position:absolute;top:-10%;bottom:-10%;left:-30%;width:20vw;pointer-events:none;
   background:linear-gradient(100deg,
-    transparent 0%,rgba(255,236,196,0) 16%,rgba(255,236,196,.22) 42%,
-    rgba(255,246,222,.4) 50%,rgba(255,236,196,.22) 58%,rgba(255,236,196,0) 84%,transparent 100%);
+    transparent 0%,rgba(255,214,222,0) 16%,rgba(255,214,222,.22) 42%,
+    rgba(255,236,240,.4) 50%,rgba(255,214,222,.22) 58%,rgba(255,214,222,0) 84%,transparent 100%);
   transform:skewX(-14deg) translateX(0);opacity:0;
 }
 #intro.sweeping .sweep{animation:sweep 1.15s cubic-bezier(.45,.05,.35,1) forwards}
@@ -265,8 +279,8 @@ body.locked{overflow:hidden}
 
 ::-webkit-scrollbar{width:9px;height:9px}
 ::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:rgba(233,223,200,.14)}
-::-webkit-scrollbar-thumb:hover{background:rgba(201,168,106,.35)}
+::-webkit-scrollbar-thumb{background:rgba(245,230,228,.14)}
+::-webkit-scrollbar-thumb:hover{background:rgba(232,154,162,.35)}
 
 @media (max-width:900px){
   .topbar-inner{padding:16px 20px 12px}
@@ -276,6 +290,9 @@ body.locked{overflow:hidden}
   .info{padding:26px 24px}
   #intro h1{font-size:30px;letter-spacing:.32em;text-indent:.32em}
   .intro-sub{font-size:12px;letter-spacing:.18em;padding:0 20px}
+  /* 窄屏下这句英文副标题会折行——缩紧字距让它留在一条线上 */
+  .brand .sub{letter-spacing:.2em;font-size:8.5px}
+  .topbar-inner{gap:14px}
 }
 </style>
 </head>
@@ -288,25 +305,23 @@ body.locked{overflow:hidden}
   <div class="pat-a" id="pat-a"></div>
   <div class="pat-d">
     <svg width="100%" height="100%" viewBox="0 0 1680 1050" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-      <g stroke="rgba(201,168,106,.18)" stroke-width="1" fill="none">
+      <g stroke="rgba(232,154,162,.20)" stroke-width="1" fill="none">
         <path d="M60 420 L125 380 L185 440 L155 520 L85 500"/>
         <path d="M1500 250 L1560 210 L1630 265 L1600 340 L1525 320 L1560 210"/>
         <path d="M1510 620 L1570 580 L1635 635 L1605 710 L1530 690"/>
       </g>
-      <g fill="rgba(240,223,174,.5)">
+      <g fill="rgba(245,222,226,.5)">
         <circle cx="60" cy="420" r="1.8"/><circle cx="125" cy="380" r="2"/><circle cx="185" cy="440" r="1.7"/><circle cx="155" cy="520" r="2"/><circle cx="85" cy="500" r="1.6"/>
         <circle cx="1500" cy="250" r="1.9"/><circle cx="1560" cy="210" r="2"/><circle cx="1630" cy="265" r="1.7"/><circle cx="1600" cy="340" r="1.9"/><circle cx="1525" cy="320" r="1.6"/>
         <circle cx="1510" cy="620" r="1.9"/><circle cx="1570" cy="580" r="1.7"/><circle cx="1635" cy="635" r="2"/><circle cx="1605" cy="710" r="1.8"/><circle cx="1530" cy="690" r="1.6"/>
       </g>
-      <g fill="rgba(255,240,200,.85)">
+      <g fill="rgba(255,238,240,.85)">
         <circle cx="125" cy="380" r="3.1"/><circle cx="1560" cy="210" r="3.3"/><circle cx="1635" cy="635" r="3"/>
       </g>
     </svg>
   </div>
   <div class="blossom b1">🌸</div>
   <div class="blossom b2">🌸</div>
-  <div class="b-core c1"></div>
-  <div class="b-core c2"></div>
 </div>
 <canvas id="pcv"></canvas>
 
@@ -356,6 +371,9 @@ const GAMES = [
   {slug:'tenshi-hane', zh:'不要践踏天使的羽毛',         orig:'天使の羽根を踏まないでっ',              year:2011, status:'played'},
   {slug:'mangekyou-4', zh:'美少女万华镜4 -罪与罚的少女-', orig:'美少女万華鏡 -罪と罰の少女-',         year:2017, status:'played'},
   {slug:'monkeys',     zh:'Monkeys!¡',                  orig:'Monkeys!¡',                             year:2021, status:'played'},
+  /* —— No Strike「女装百合」系列 —— */
+  {slug:'trap-yuri-garden', zh:'女装百合畑',             orig:'女装百合畑',                            year:2024, status:'playing'},
+  {slug:'trap-yuri-storm',  zh:'女装百合岚',             orig:'女装百合嵐',                            year:2026, status:'wish', cover:false},
 ];
 /* =================================================================== */
 
@@ -382,15 +400,54 @@ const intro = document.getElementById('intro');
   }
 
   // shippo ground, with the pattern "cut away" wherever a blossom sits
-  const PETALS = ["", "rotate(72)", "rotate(144)", "rotate(216)", "rotate(288)"]
-    .map(t => "<g" + (t ? " transform='" + t + "'" : "") + "><ellipse cx='0' cy='-38' rx='30' ry='40'/></g>").join("");
   const patA = document.getElementById('pat-a');
+
+  // --- sakura cutout geometry, derived from the LIVE blossom rects ---
+  // Measured off the rendered 🌸 emoji in headless Edge: petal tips reach
+  // 0.507 * font-size from the glyph centre, and the lobes sit every 72deg
+  // starting at +10deg. The petal ellipse below reaches 1.02R, so R here maps to
+  // roughly 1.02 * R of actual cutout radius.
+  const EMOJI_INK = 0.44;
+  const PETAL_COUNT = 5;
+  const PETAL_PHASE = 10;    // degrees; matches the emoji's lobe phase
+  // The emoji's notches sit at only ~0.76 of its tip radius, so a cutout matching the
+  // tips alone leaves pattern slivers in those notches. CUTOUT_SLACK grows the cutout
+  // just enough to fully contain the glyph.
+  const CUTOUT_SLACK = 1.06;
+  // one petal = a rounded lobe centred at 0.50R along its own direction, long axis outward
+  function petals(out, r) {
+    const cy = (r * 0.50).toFixed(2), rx = (r * 0.48).toFixed(2), ry = (r * 0.52).toFixed(2);
+    for (let i = 0; i < PETAL_COUNT; i++) {
+      // NB: SVG rotate() runs CLOCKWISE in screen coords and we enumerate clockwise too,
+      // so the petal always points along its own rotated -Y axis. (Mixing this up with CSS
+      // counter-clockwise angles squashes all five petals into one blob.)
+      const a = PETAL_PHASE + (360 / PETAL_COUNT) * i;
+      out.push(`<ellipse cx='0' cy='${-cy}' rx='${rx}' ry='${ry}' transform='rotate(${a})'/>`);
+    }
+  }
+  // one blossom = 5 petals + a soft core, offset from the glyph-box centre by the
+  // measured ink offset (dx/dy are fractions of font-size)
+  function blossomMask(rect, fs, dx, dy, out) {
+    const r = Math.min(fs * EMOJI_INK * CUTOUT_SLACK, 350);
+    const cx = rect.left + rect.width / 2 + dx * fs;
+    const cy = rect.top + rect.height / 2 + dy * fs;
+    out.push(`<g transform='translate(${cx.toFixed(1)} ${cy.toFixed(1)})' fill='#fff'>`);
+    petals(out, r);
+    out.push(`<circle r='${(r * 0.22).toFixed(2)}'/>`);
+    out.push(`</g>`);
+  }
   function applyMask(){
     const W = innerWidth, H = innerHeight;
-    const g = (x, y, s) => `<g transform='translate(${x} ${y}) scale(${s})' fill='#fff'>${PETALS}<circle r='16'/></g>`;
-    const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${W}' height='${H}'>`
-      + g(205, 365, 3.46) + g(W - 225, H - 155, 3.97) + `</svg>`;
-    const uri = `url("data:image/svg+xml;utf8,${svg}")`;
+    const shapes = [];
+    const b1 = document.querySelector('.blossom.b1').getBoundingClientRect();
+    const b2 = document.querySelector('.blossom.b2').getBoundingClientRect();
+    blossomMask(b1, 560, 0.018, 0.078, shapes);
+    blossomMask(b2, 640, -0.013, 0.009, shapes);
+    const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${W}' height='${H}'>${shapes.join('')}</svg>`;
+    // NOTE: base64, NOT `;utf8,` + raw markup — a literal `#` inside the SVG starts a
+    // URL fragment and truncates the data URI at `fill=`, which silently kills the
+    // whole mask layer (the cutout then never happened at all).
+    const uri = `url("data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svg)))}")`;
     const m = `linear-gradient(#fff, #fff), ${uri}`;
     patA.style.webkitMaskImage = m;  patA.style.webkitMaskComposite = 'xor';
     patA.style.maskImage = m;        patA.style.maskComposite = 'exclude';
@@ -404,6 +461,9 @@ const intro = document.getElementById('intro');
 (function stardust(){
   const cv = document.getElementById('pcv');
   const ctx = cv.getContext('2d');
+  // 星尘颜色：canvas 画的东西 CSS 管不到，只能写在这里。改配色时记得同步这一处。
+  const DUST = '245,222,226';   // 柔和玫瑰白（暮金时代是 240,223,174）
+  const SHINE = '255,238,240';
   let W, H; const DPR = Math.min(window.devicePixelRatio || 1, 2);
   function resize(){
     W = window.innerWidth; H = window.innerHeight;
@@ -435,21 +495,17 @@ const intro = document.getElementById('intro');
       const near = d < R;
       const a = Math.min(1, p.b + (near ? (1 - d/R) * .75 : 0));
       ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.2832);
-      ctx.fillStyle = 'rgba(240,223,174,' + a.toFixed(2) + ')';
-      if (p.big) { ctx.shadowBlur = 8; ctx.shadowColor = 'rgba(240,223,174,.8)'; }
+      ctx.fillStyle = 'rgba(' + DUST + ',' + a.toFixed(2) + ')';
+      if (p.big) { ctx.shadowBlur = 8; ctx.shadowColor = 'rgba(' + SHINE + ',.8)'; }
       ctx.fill(); ctx.shadowBlur = 0;
       if (near) {
         ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(mx, my);
-        ctx.strokeStyle = 'rgba(240,223,174,' + ((1 - d/R) * .5).toFixed(2) + ')';
+        ctx.strokeStyle = 'rgba(' + DUST + ',' + ((1 - d/R) * .5).toFixed(2) + ')';
         ctx.lineWidth = .7; ctx.stroke();
       }
     }
-    if (mx > -999) {
-      ctx.beginPath(); ctx.arc(mx, my, 2.6, 0, 6.2832);
-      ctx.fillStyle = 'rgba(255,246,220,.9)';
-      ctx.shadowBlur = 16; ctx.shadowColor = 'rgba(255,240,200,.9)';
-      ctx.fill(); ctx.shadowBlur = 0;
-    }
+    // NB: no dot drawn at the cursor itself — the user asked for no "star that follows
+    // the mouse". The link lines above are what remains of the cursor reaction.
     requestAnimationFrame(loop);
   })();
 })();
@@ -488,16 +544,25 @@ function render(){
     } else if (g.status === 'wish') {
       starsHtml = '<span class="none">— 未玩 · 等待开启 —</span>';
     }
+    // cover:false -> 官方还没出竖版封面素材，用占位砖（别留个破图）
+    // .prism / .glass 必须留在 .view 里面（倾斜彩虹光靠它们）
+    const inner = g.cover === false
+      ? `<div class="nc-mark">🌸</div>
+         <div class="nc-zh">${g.zh}</div>
+         <div class="nc-orig">${g.orig}</div>
+         <div class="nc-tag">封面征集中</div>`
+      : `<img src="images/${g.slug}.jpg" alt="${g.zh}" loading="lazy">`;
+    const coverHtml = `<div class="view${g.cover === false ? ' nocover' : ''}">
+           ${inner}
+           <i class="prism"></i>
+           <i class="glass"></i>
+         </div>`;
     return `
     <div class="cell" style="--i:${i};--r0:${r0.toFixed(2)}deg">
       <div class="tile">
         <i class="halo"></i>
         <div class="card ${g.status}" data-i="${i}" style="--r:${r.toFixed(2)};--dy:${dy.toFixed(1)}">
-          <div class="view">
-            <img src="images/${g.slug}.jpg" alt="${g.zh}" loading="lazy">
-            <i class="prism"></i>
-            <i class="glass"></i>
-          </div>
+          ${coverHtml}
         </div>
       </div>
       <div class="info">
