@@ -186,17 +186,19 @@ body.locked{overflow:hidden}
 
 /* wish — 封面同样彩色展示（状态由信息板徽章表示） */
 
-/* prismatic scattering — the rainbow light follows the cursor */
+/* prismatic scattering — the rainbow light follows the cursor
+   （用户反馈"散射太强"，调弱：半径 190->140、透明度整体降约 35%、
+     blur 6.5->9 让色带更糊、saturate 1.4->1.15 收一点艳度） */
 .prism{
   position:absolute;inset:0;z-index:3;pointer-events:none;
   opacity:0;transition:opacity .4s ease;
   mix-blend-mode:screen;
-  background:radial-gradient(190px circle at var(--mx,50%) var(--my,42%),
-    rgba(255,92,112,.58),rgba(255,196,76,.52) 16%,rgba(130,255,150,.48) 32%,
-    rgba(80,178,255,.52) 48%,rgba(190,120,255,.55) 64%,rgba(255,92,112,0) 79%);
-  filter:blur(6.5px) saturate(1.4);
+  background:radial-gradient(140px circle at var(--mx,50%) var(--my,42%),
+    rgba(255,92,112,.38),rgba(255,196,76,.34) 16%,rgba(130,255,150,.31) 32%,
+    rgba(80,178,255,.34) 48%,rgba(190,120,255,.36) 64%,rgba(255,92,112,0) 79%);
+  filter:blur(9px) saturate(1.15);
 }
-.card:hover .prism{opacity:.85}
+.card:hover .prism{opacity:.5}
 
 /* info board: the old modal contents, sitting right beside the tile */
 .info{
@@ -373,7 +375,7 @@ const GAMES = [
   {slug:'monkeys',     zh:'Monkeys!¡',                  orig:'Monkeys!¡',                             year:2021, status:'played'},
   /* —— No Strike「女装百合」系列 —— */
   {slug:'trap-yuri-garden', zh:'女装百合畑',             orig:'女装百合畑',                            year:2024, status:'playing'},
-  {slug:'trap-yuri-storm',  zh:'女装百合岚',             orig:'女装百合嵐',                            year:2026, status:'wish', cover:false},
+  {slug:'trap-yuri-storm',  zh:'女装百合岚',             orig:'女装百合嵐',                            year:2026, status:'wish'},
 ];
 /* =================================================================== */
 
