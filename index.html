@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>F🌸B🌸游戏记录</title>
+<title>男の娘游戏集</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
-<meta name="description" content="F🌸B🌸游戏记录 —— 我玩过的视觉小说与 galgame 收藏册。">
-<meta property="og:title" content="F🌸B🌸游戏记录">
+<meta name="description" content="男の娘游戏集 —— 我玩过的视觉小说与 galgame 收藏册。">
+<meta property="og:title" content="男の娘游戏集">
 <meta property="og:description" content="我玩过的视觉小说与 galgame 收藏册。">
 <link rel="preload" as="style" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" onload="this.onload=null;this.rel='stylesheet'">
 <style>
@@ -22,6 +22,8 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
+/* 表里原本没有任何 a 规则，官网角标是第一个链接 —— 不重置会带上默认蓝紫色和下划线 */
+a{color:inherit;text-decoration:none}
 body{
   background:radial-gradient(1500px 950px at 50% 24%,#2e1a1e 0%,#1a0f12 55%,#0c0708 100%) fixed var(--bg);
   color:var(--text);
@@ -155,6 +157,30 @@ body.locked{overflow:hidden}
   content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
   box-shadow:inset 0 0 20px rgba(0,0,0,.25),inset 0 -4px 8px rgba(0,0,0,.28),inset -1px 0 0 rgba(0,0,0,.22);
 }
+
+/* ---------- 官网角标（封面右上角，只有符号不写字） ----------
+   放在 .view 外面：.view 有 overflow:hidden 且是 3D 变换层。
+   z-index:7 要盖过 .glass(z5)；.prism(z3) 无所谓但也没冲突。
+   24×24 是触控最小可点尺寸，别缩。 */
+.golink{
+  position:absolute;top:6px;right:6px;z-index:7;
+  width:24px;height:24px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;opacity:.72;
+  /* 封面普遍是亮色（平均亮度 177），底色太透会糊在图上认不出来 ——
+     用近实心深色 + 细描边，保证在任意封面上都能看清 */
+  background:rgba(14,8,10,.82);
+  box-shadow:0 1px 4px rgba(0,0,0,.45),inset 0 0 0 1px rgba(255,236,240,.22);
+  -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+  transition:opacity .25s ease,background-color .25s ease;
+}
+.golink svg{width:13px;height:13px;stroke:#fdf3f4;stroke-width:1.9;fill:none;
+  stroke-linecap:round;stroke-linejoin:round;transition:stroke .25s ease}
+/* 高亮同时挂 :hover（正常浏览器走这条）和 .is-hot（JS 加的类）。
+   为什么两份都要：角标位于 .card 这个带 3D transform 的合成层里，
+   实测在 headless/部分合成路径下 :hover 会"匹配得上但样式不生效"，
+   靠 JS 加类可以保证任何环境下都有反馈。两者不冲突，重复声明无害。 */
+.golink:hover,.golink:focus-visible,.golink.is-hot{opacity:1;background:rgba(178,88,112,.92)}
+.golink:hover svg,.golink:focus-visible svg,.golink.is-hot svg{stroke:#fff8f9}
 
 /* acrylic glass surface: prism edges, corner glints, diagonal sheen */
 .glass{
@@ -295,6 +321,8 @@ body.locked{overflow:hidden}
   /* 窄屏下这句英文副标题会折行——缩紧字距让它留在一条线上 */
   .brand .sub{letter-spacing:.2em;font-size:8.5px}
   .topbar-inner{gap:14px}
+  /* 页脚文案有 18 字符（原来只有 8 字），.3em 的字距在 390px 下会折行 */
+  .foot{letter-spacing:.18em}
 }
 </style>
 </head>
@@ -330,8 +358,8 @@ body.locked{overflow:hidden}
 <header class="topbar">
   <div class="topbar-inner">
     <div class="brand">
-      <div class="logo"><em>F🌸B🌸</em>游戏记录</div>
-      <div class="sub">GAME RECOLLECTION ARCHIVE</div>
+      <div class="logo"><em>🌸</em>男の娘游戏集</div>
+      <div class="sub">OTOKONOKO VISUAL NOVELS</div>
     </div>
     <div class="counter">已玩 <b id="c-ok">0</b> <span style="opacity:.45">/</span> <span id="c-all">0</span></div>
   </div>
@@ -339,12 +367,12 @@ body.locked{overflow:hidden}
 
 <main class="grid" id="grid"></main>
 
-<footer class="foot">记录持续添加中</footer>
+<footer class="foot">男の娘 / 女装题材视觉小说推荐</footer>
 
 <div id="intro">
   <i class="sweep"></i>
   <div class="intro-inner">
-    <h1><em>F🌸B🌸</em>游戏记录</h1>
+    <h1>男の娘游戏集</h1>
     <div class="intro-line"></div>
     <p class="intro-sub">读过的故事仍在发光，未读的故事还在等待。</p>
     <div class="intro-click"><span>CLICK TO ENTER</span></div>
@@ -355,27 +383,32 @@ body.locked{overflow:hidden}
 /* =====================================================================
    游戏数据区 —— 新增游戏时在这里添加条目，并把封面图放进 images/
    status: played(已玩) | playing(进行中) | wish(未玩)
+   series: 分组键。同系列填同一个字符串；单部作品不填（自成一组）。
+           显示顺序由下面的 displayOrder() 算：系列之间按"该系列最新一部"的年份倒序，
+           系列之内也按年份倒序。所以这里保持按剧情/年份书写即可，不用手动排版。
+   site:   官网地址（封面右上角角标的跳转目标）。官方站已消失的填 VNDB 页面。
+           不填则那一条不显示角标。
    ===================================================================== */
 const GAMES = [
-  /* —— 近月少女的礼仪系列（Navel，按发售顺序） —— */
-  {slug:'tsukiniyorisou-1',   zh:'近月少女的礼仪',        orig:'月に寄りそう乙女の作法',                year:2012, status:'played'},
-  {slug:'otomeriron',         zh:'少女理论及其周边',      orig:'乙女理論とその周辺 -Ecole de Paris-',   year:2013, status:'played'},
-  {slug:'tsukiniyorisou-2',   zh:'近月少女的礼仪2',       orig:'月に寄りそう乙女の作法2',               year:2014, status:'played'},
-  {slug:'belle-epoque',       zh:'少女理论及其之后的周边', orig:'乙女理論とその後の周辺 -Belle Époque-', year:2016, status:'played'},
-  {slug:'tsukiniyorisou-2-1', zh:'近月少女的礼仪2.1',     orig:'月に寄りそう乙女の作法2.1 E×S×PAR!!',  year:2017, status:'played'},
-  {slug:'tsukiniyorisou-2-2', zh:'近月少女的礼仪2.2',     orig:'月に寄りそう乙女の作法2.2 A×L+SA!!',   year:2017, status:'played'},
+  /* —— 近月少女的礼仪系列（Navel，按剧情顺序书写） —— */
+  {slug:'tsukiniyorisou-1',   zh:'近月少女的礼仪',        orig:'月に寄りそう乙女の作法',                year:2012, status:'played', series:'tsukiniyorisou', site:'http://project-navel.com/tsukiniyorisou/'},
+  {slug:'otomeriron',         zh:'少女理论及其周边',      orig:'乙女理論とその周辺 -Ecole de Paris-',   year:2013, status:'played', series:'tsukiniyorisou', site:'http://project-navel.com/otomeriron/'},
+  {slug:'tsukiniyorisou-2',   zh:'近月少女的礼仪2',       orig:'月に寄りそう乙女の作法2',               year:2014, status:'played', series:'tsukiniyorisou', site:'http://project-navel.com/tsukiniyorisou_2nd/'},
+  {slug:'belle-epoque',       zh:'少女理论及其之后的周边', orig:'乙女理論とその後の周辺 -Belle Époque-', year:2016, status:'played', series:'tsukiniyorisou', site:'http://project-navel.com/otome_sonogo/'},
+  {slug:'tsukiniyorisou-2-1', zh:'近月少女的礼仪2.1',     orig:'月に寄りそう乙女の作法2.1 E×S×PAR!!',  year:2017, status:'played', series:'tsukiniyorisou', site:'http://project-navel.com/tsukiniyorisou_2nd_espar/'},
+  {slug:'tsukiniyorisou-2-2', zh:'近月少女的礼仪2.2',     orig:'月に寄りそう乙女の作法2.2 A×L+SA!!',   year:2017, status:'played', series:'tsukiniyorisou', site:'http://project-navel.com/tsukiniyorisou_2nd_alsa/'},
   /* —— 其他 —— */
-  {slug:'otoboku-1',   zh:'少女爱上姐姐',               orig:'処女はお姉さまに恋してる',              year:2005, status:'played'},
-  {slug:'mugenkairou', zh:'梦幻廻廊',                   orig:'夢幻廻廊',                              year:2005, status:'played'},
-  {slug:'kirakira',    zh:'KIRA☆KIRA 煌煌舞台',         orig:'キラ☆キラ',                             year:2007, status:'played'},
-  {slug:'ruitomo',     zh:'智以类聚',                   orig:'るいは智を呼ぶ',                        year:2008, status:'played'},
-  {slug:'otoboku-2',   zh:'少女爱上姐姐2',              orig:'処女はお姉さまに恋してる ～2人のエルダー～', year:2010, status:'played'},
-  {slug:'tenshi-hane', zh:'不要践踏天使的羽毛',         orig:'天使の羽根を踏まないでっ',              year:2011, status:'played'},
-  {slug:'mangekyou-4', zh:'美少女万华镜4 -罪与罚的少女-', orig:'美少女万華鏡 -罪と罰の少女-',         year:2017, status:'played'},
-  {slug:'monkeys',     zh:'Monkeys!¡',                  orig:'Monkeys!¡',                             year:2021, status:'played'},
+  {slug:'otoboku-1',   zh:'少女爱上姐姐',               orig:'処女はお姉さまに恋してる',              year:2005, status:'played', series:'otoboku', site:'https://vndb.org/v195'},
+  {slug:'mugenkairou', zh:'梦幻廻廊',                   orig:'夢幻廻廊',                              year:2005, status:'played', site:'https://www.cyc-soft.com/b-cyc-pro/mugen/index.htm'},
+  {slug:'kirakira',    zh:'KIRA☆KIRA 煌煌舞台',         orig:'キラ☆キラ',                             year:2007, status:'played', site:'http://project.over-drive.jp/kirakira/'},
+  {slug:'ruitomo',     zh:'智以类聚',                   orig:'るいは智を呼ぶ',                        year:2008, status:'played', site:'http://www.akatsukiworks.com/product/ruitomo/product.html'},
+  {slug:'otoboku-2',   zh:'少女爱上姐姐2',              orig:'処女はお姉さまに恋してる ～2人のエルダー～', year:2010, status:'played', series:'otoboku', site:'https://vndb.org/v3861'},
+  {slug:'tenshi-hane', zh:'不要践踏天使的羽毛',         orig:'天使の羽根を踏まないでっ',              year:2011, status:'played', site:'https://vndb.org/v6411'},
+  {slug:'mangekyou-4', zh:'美少女万华镜4 -罪与罚的少女-', orig:'美少女万華鏡 -罪と罰の少女-',         year:2017, status:'played', site:'https://vndb.org/v19182'},
+  {slug:'monkeys',     zh:'Monkeys!¡',                  orig:'Monkeys!¡',                             year:2021, status:'played', site:'https://harukaze-soft.com/monkeys/'},
   /* —— No Strike「女装百合」系列 —— */
-  {slug:'trap-yuri-garden', zh:'女装百合畑',             orig:'女装百合畑',                            year:2024, status:'playing'},
-  {slug:'trap-yuri-storm',  zh:'女装百合岚',             orig:'女装百合嵐',                            year:2026, status:'wish'},
+  {slug:'trap-yuri-garden', zh:'女装百合畑',             orig:'女装百合畑',                            year:2024, status:'playing', series:'trap-yuri', site:'https://no-strike.jp/'},
+  {slug:'trap-yuri-storm',  zh:'女装百合岚',             orig:'女装百合嵐',                            year:2026, status:'wish',    series:'trap-yuri', site:'https://no-strike.jp/'},
 ];
 /* =================================================================== */
 
@@ -531,9 +564,47 @@ document.addEventListener('mousemove', e => {
   requestAnimationFrame(glowLoop);
 })();
 
+/* ---------- 显示顺序 ----------
+   系列之间按"该系列最新一部"的年份倒序；系列之内也按年份倒序。
+   同年并列时按该组在 GAMES 里首次出现的位置排 —— 所以 2017 年的单部作品
+   （万华镜4，数组中靠前）会排在 2017 年收尾的近月系列前面。
+   注意：系列内也是倒序 —— 这是用户明确选定的（近月系列会呈现 2.2 → … → 近月1）。
+   GAMES 数组本身保持按剧情/年份书写，排版全部交给这里。 */
+function displayOrder(){
+  const groups = new Map();
+  GAMES.forEach((g, i) => {
+    const key = g.series || ('__solo__' + g.slug);   // 没写 series 的各自成组
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push({ g, i });
+  });
+
+  // 每组算出两个排序键：组内最新年份、组在 GAMES 里首次出现的位置
+  const items = [];
+  groups.forEach(m => {
+    const sorted = m.slice().sort((a, b) => (b.g.year - a.g.year) || (a.i - b.i));
+    let newest = 0, first = Infinity;
+    for (const x of m) {
+      if (x.g.year > newest) newest = x.g.year;
+      if (x.i < first) first = x.i;
+    }
+    items.push({ sorted, newest, first });
+  });
+
+  // 组间：最新年份倒序；并列则先出现的组在前
+  items.sort((A, B) => {
+    if (B.newest !== A.newest) return B.newest - A.newest;
+    return A.first - B.first;
+  });
+
+  const out = [];
+  for (const it of items) for (const x of it.sorted) out.push(x.g);
+  return out;
+}
+
 /* ---------- render the list ---------- */
 function render(){
-  grid.innerHTML = GAMES.map((g,i)=>{
+  const list = displayOrder();
+  grid.innerHTML = list.map((g,i)=>{
     const r    = (((i*37)%9) - 4) * 0.34;      // resting tilt  ~ -1.36..1.36 deg
     const dy   = (((i*53)%7) - 3) * 3.2;       // resting offset ~ -9.6..9.6 px
     const r0   = (((i*29)%11) - 5) * 0.9;      // entrance scatter tilt
@@ -559,12 +630,20 @@ function render(){
            <i class="prism"></i>
            <i class="glass"></i>
          </div>`;
+    // 官网角标：只有符号，没有文字。rel 必须带 noopener/noreferrer —— 否则新开的页面
+    // 能通过 window.opener 反控本站。没填 site 的条目整个 <a> 不输出。
+    const linkHtml = g.site
+      ? `<a class="golink" href="${g.site}" target="_blank" rel="noopener noreferrer"
+            aria-label="${g.zh} 官网" title="${g.zh} 官网"
+         ><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4l-8.5 8.5"/><path d="M18 14.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h4.5"/></svg></a>`
+      : '';
     return `
     <div class="cell" style="--i:${i};--r0:${r0.toFixed(2)}deg">
       <div class="tile">
         <i class="halo"></i>
         <div class="card ${g.status}" data-i="${i}" style="--r:${r.toFixed(2)};--dy:${dy.toFixed(1)}">
           ${coverHtml}
+          ${linkHtml}
         </div>
       </div>
       <div class="info">
@@ -594,6 +673,19 @@ function render(){
       el.style.setProperty('--tx','0');
       el.style.setProperty('--ty','0');
     });
+  });
+
+  // 官网角标的高亮：JS 挂 .is-hot，保证在 :hover 样式不生效的合成路径下也有反馈。
+  // 另外点一下就把高亮撤掉 —— 新标签页接管后鼠标还停在角标上，
+  // 不撤会一直亮着（视觉上像"选中了"）。
+  grid.querySelectorAll('.golink').forEach(a=>{
+    const on  = ()=>a.classList.add('is-hot');
+    const off = ()=>a.classList.remove('is-hot');
+    a.addEventListener('mouseenter', on);
+    a.addEventListener('mouseleave', off);
+    a.addEventListener('focus', on);
+    a.addEventListener('blur', off);
+    a.addEventListener('click', off);
   });
 
   // counters
