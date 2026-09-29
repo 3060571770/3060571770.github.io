@@ -617,12 +617,11 @@ function render(){
     const r0   = (((i*29)%11) - 5) * 0.9;      // entrance scatter tilt
     const s    = STATUS[g.status];
     let starsHtml = '';
+    // 没打分的条目这里就是空的 —— 名称下面不再显示「— 进行中 —」「— 未玩 · 等待开启 —」
+    // 这类占位文字（用户要求：未玩/在玩的都不显示这种字样）。
+    // 状态仍然由右上角的徽章表达，别把占位文案加回来。
     if (g.stars) {
       starsHtml = '★'.repeat(g.stars) + `<span class="off">${'★'.repeat(5 - g.stars)}</span>`;
-    } else if (g.status === 'playing') {
-      starsHtml = '<span class="none">— 进行中 —</span>';
-    } else if (g.status === 'wish') {
-      starsHtml = '<span class="none">— 未玩 · 等待开启 —</span>';
     }
     // cover:false -> 官方还没出竖版封面素材，用占位砖（别留个破图）
     // .prism / .glass 必须留在 .view 里面（倾斜彩虹光靠它们）
