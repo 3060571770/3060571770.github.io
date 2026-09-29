@@ -76,6 +76,7 @@ body.locked{overflow:hidden}
 .brand .sub{font-size:9.5px;letter-spacing:.46em;color:rgba(245,230,228,.3);margin-top:5px}
 .counter{font-size:12px;letter-spacing:.2em;color:var(--text-dim);white-space:nowrap}
 .counter b{color:var(--gold);font-weight:500}
+.counter .sep{opacity:.4;margin:0 .75em}
 
 /* ---------- the list: one game per row (tile + info board) ---------- */
 .grid{
@@ -319,8 +320,14 @@ body.locked{overflow:hidden}
   #intro h1{font-size:30px;letter-spacing:.32em;text-indent:.32em}
   .intro-sub{font-size:12px;letter-spacing:.18em;padding:0 20px}
   /* 窄屏下这句英文副标题会折行——缩紧字距让它留在一条线上 */
-  .brand .sub{letter-spacing:.2em;font-size:8.5px}
-  .topbar-inner{gap:14px}
+  .brand .sub{letter-spacing:.16em;font-size:8px}
+  .topbar-inner{gap:10px}
+  /* 窄屏顶栏要同时塞下「🌸站名 + 英文副标题 + 统计」。
+     统计从「14/16」改成「收录 16 部·14 部已通关」后变宽，会把品牌挤到折行
+     （"男の娘游戏 / 集"），所以这里三样一起收字距/字号。文案不改，只压排布。 */
+  .brand .logo{font-size:16px;letter-spacing:.1em}
+  .counter{font-size:10px;letter-spacing:.04em}
+  .counter .sep{margin:0 .35em}
   /* 页脚文案有 18 字符（原来只有 8 字），.3em 的字距在 390px 下会折行 */
   .foot{letter-spacing:.18em}
 }
@@ -361,7 +368,7 @@ body.locked{overflow:hidden}
       <div class="logo"><em>🌸</em>男の娘游戏集</div>
       <div class="sub">OTOKONOKO VISUAL NOVELS</div>
     </div>
-    <div class="counter">已玩 <b id="c-ok">0</b> <span style="opacity:.45">/</span> <span id="c-all">0</span></div>
+    <div class="counter">收录 <b id="c-all">0</b> 部<span class="sep">·</span><b id="c-ok">0</b> 部已通关</div>
   </div>
 </header>
 
@@ -391,23 +398,23 @@ body.locked{overflow:hidden}
    ===================================================================== */
 const GAMES = [
   /* —— 近月少女的礼仪系列（Navel，按剧情顺序书写） —— */
-  {slug:'tsukiniyorisou-1',   zh:'近月少女的礼仪',        orig:'月に寄りそう乙女の作法',                year:2012, status:'played', series:'tsukiniyorisou', site:'http://project-navel.com/tsukiniyorisou/'},
-  {slug:'otomeriron',         zh:'少女理论及其周边',      orig:'乙女理論とその周辺 -Ecole de Paris-',   year:2013, status:'played', series:'tsukiniyorisou', site:'http://project-navel.com/otomeriron/'},
-  {slug:'tsukiniyorisou-2',   zh:'近月少女的礼仪2',       orig:'月に寄りそう乙女の作法2',               year:2014, status:'played', series:'tsukiniyorisou', site:'http://project-navel.com/tsukiniyorisou_2nd/'},
-  {slug:'belle-epoque',       zh:'少女理论及其之后的周边', orig:'乙女理論とその後の周辺 -Belle Époque-', year:2016, status:'played', series:'tsukiniyorisou', site:'http://project-navel.com/otome_sonogo/'},
-  {slug:'tsukiniyorisou-2-1', zh:'近月少女的礼仪2.1',     orig:'月に寄りそう乙女の作法2.1 E×S×PAR!!',  year:2017, status:'played', series:'tsukiniyorisou', site:'http://project-navel.com/tsukiniyorisou_2nd_espar/'},
-  {slug:'tsukiniyorisou-2-2', zh:'近月少女的礼仪2.2',     orig:'月に寄りそう乙女の作法2.2 A×L+SA!!',   year:2017, status:'played', series:'tsukiniyorisou', site:'http://project-navel.com/tsukiniyorisou_2nd_alsa/'},
+  {slug:'tsukiniyorisou-1',   zh:'近月少女的礼仪',        orig:'月に寄りそう乙女の作法',                year:2012, status:'played', series:'tsukiniyorisou', stars:5, note:'朝日娘很可爱，女装潜入题材最高的山', site:'http://project-navel.com/tsukiniyorisou/'},
+  {slug:'otomeriron',         zh:'少女理论及其周边',      orig:'乙女理論とその周辺 -Ecole de Paris-',   year:2013, status:'played', series:'tsukiniyorisou', stars:5, note:'妹妹线牛逼，全家都是游星控', site:'http://project-navel.com/otomeriron/'},
+  {slug:'tsukiniyorisou-2',   zh:'近月少女的礼仪2',       orig:'月に寄りそう乙女の作法2',               year:2014, status:'played', series:'tsukiniyorisou', stars:5, note:'略逊色于一代，才华有点高傲，感觉不如大藏游星，这波是富二代开局不如平民开局', site:'http://project-navel.com/tsukiniyorisou_2nd/'},
+  {slug:'belle-epoque',       zh:'少女理论及其之后的周边', orig:'乙女理論とその後の周辺 -Belle Époque-', year:2016, status:'played', series:'tsukiniyorisou', stars:5, note:'挺好的', site:'http://project-navel.com/otome_sonogo/'},
+  {slug:'tsukiniyorisou-2-1', zh:'近月少女的礼仪2.1',     orig:'月に寄りそう乙女の作法2.1 E×S×PAR!!',  year:2017, status:'played', series:'tsukiniyorisou', stars:5, site:'http://project-navel.com/tsukiniyorisou_2nd_espar/'},
+  {slug:'tsukiniyorisou-2-2', zh:'近月少女的礼仪2.2',     orig:'月に寄りそう乙女の作法2.2 A×L+SA!!',   year:2017, status:'played', series:'tsukiniyorisou', stars:5, site:'http://project-navel.com/tsukiniyorisou_2nd_alsa/'},
   /* —— 其他 —— */
-  {slug:'otoboku-1',   zh:'少女爱上姐姐',               orig:'処女はお姉さまに恋してる',              year:2005, status:'played', series:'otoboku', site:'https://vndb.org/v195'},
-  {slug:'mugenkairou', zh:'梦幻廻廊',                   orig:'夢幻廻廊',                              year:2005, status:'played', site:'https://www.cyc-soft.com/b-cyc-pro/mugen/index.htm'},
-  {slug:'kirakira',    zh:'KIRA☆KIRA 煌煌舞台',         orig:'キラ☆キラ',                             year:2007, status:'played', site:'http://project.over-drive.jp/kirakira/'},
-  {slug:'ruitomo',     zh:'智以类聚',                   orig:'るいは智を呼ぶ',                        year:2008, status:'played', site:'http://www.akatsukiworks.com/product/ruitomo/product.html'},
-  {slug:'otoboku-2',   zh:'少女爱上姐姐2',              orig:'処女はお姉さまに恋してる ～2人のエルダー～', year:2010, status:'played', series:'otoboku', site:'https://vndb.org/v3861'},
-  {slug:'tenshi-hane', zh:'不要践踏天使的羽毛',         orig:'天使の羽根を踏まないでっ',              year:2011, status:'played', site:'https://vndb.org/v6411'},
-  {slug:'mangekyou-4', zh:'美少女万华镜4 -罪与罚的少女-', orig:'美少女万華鏡 -罪と罰の少女-',         year:2017, status:'played', site:'https://vndb.org/v19182'},
-  {slug:'monkeys',     zh:'Monkeys!¡',                  orig:'Monkeys!¡',                             year:2021, status:'played', site:'https://harukaze-soft.com/monkeys/'},
+  {slug:'otoboku-1',   zh:'少女爱上姐姐',               orig:'処女はお姉さまに恋してる',              year:2005, status:'played', series:'otoboku', stars:5, note:'女装潜入题材的开山之作（大概）', site:'https://vndb.org/v195'},
+  {slug:'mugenkairou', zh:'梦幻廻廊',                   orig:'夢幻廻廊',                              year:2005, status:'played', stars:3, note:'第一个让我玩出内伤的女装游戏，过剧情都是sancheck，整整打了3个月才打完，也许抖m会喜欢吧。', site:'https://www.cyc-soft.com/b-cyc-pro/mugen/index.htm'},
+  {slug:'kirakira',    zh:'KIRA☆KIRA 煌煌舞台',         orig:'キラ☆キラ',                             year:2007, status:'played', stars:5, note:'非常好的作品，能让人感叹青春。放在这里是因为男主后面会穿女装开巡演……', site:'http://project.over-drive.jp/kirakira/'},
+  {slug:'ruitomo',     zh:'智以类聚',                   orig:'るいは智を呼ぶ',                        year:2008, status:'played', stars:5, note:'非常新奇的作品，玩了那么久第一次遇到女装题材既没有校园也没有教堂', site:'http://www.akatsukiworks.com/product/ruitomo/product.html'},
+  {slug:'otoboku-2',   zh:'少女爱上姐姐2',              orig:'処女はお姉さまに恋してる ～2人のエルダー～', year:2010, status:'played', series:'otoboku', stars:4, note:'玩的时候有既视感，剧情安排上和一代有点重复', site:'https://vndb.org/v3861'},
+  {slug:'tenshi-hane', zh:'不要践踏天使的羽毛',         orig:'天使の羽根を踏まないでっ',              year:2011, status:'played', stars:4, note:'理想中的男の娘，强大又美丽', site:'https://vndb.org/v6411'},
+  {slug:'mangekyou-4', zh:'美少女万华镜4 -罪与罚的少女-', orig:'美少女万華鏡 -罪と罰の少女-',         year:2017, status:'played', stars:4, note:'男主很色，badend很美味', site:'https://vndb.org/v19182'},
+  {slug:'monkeys',     zh:'Monkeys!¡',                  orig:'Monkeys!¡',                             year:2021, status:'played', stars:4, note:'搞笑题材耳目一新，但从头到尾一直搞笑就有点乏力了', site:'https://harukaze-soft.com/monkeys/'},
   /* —— No Strike「女装百合」系列 —— */
-  {slug:'trap-yuri-garden', zh:'女装百合畑',             orig:'女装百合畑',                            year:2024, status:'playing', series:'trap-yuri', site:'https://no-strike.jp/'},
+  {slug:'trap-yuri-garden', zh:'女装百合畑',             orig:'女装百合畑',                            year:2024, status:'played', series:'trap-yuri', stars:4, note:'女装百合，难得一遇，剧情推进还算合理，但就是太短了', site:'https://no-strike.jp/'},
   {slug:'trap-yuri-storm',  zh:'女装百合岚',             orig:'女装百合嵐',                            year:2026, status:'wish',    series:'trap-yuri', site:'https://no-strike.jp/'},
 ];
 /* =================================================================== */
@@ -610,7 +617,7 @@ function render(){
     const r0   = (((i*29)%11) - 5) * 0.9;      // entrance scatter tilt
     const s    = STATUS[g.status];
     let starsHtml = '';
-    if (g.status === 'played' && g.stars) {
+    if (g.stars) {
       starsHtml = '★'.repeat(g.stars) + `<span class="off">${'★'.repeat(5 - g.stars)}</span>`;
     } else if (g.status === 'playing') {
       starsHtml = '<span class="none">— 进行中 —</span>';
@@ -689,9 +696,11 @@ function render(){
   });
 
   // counters
+  // 顶栏统计：先报"收录总数"，再报"已通关数"——面向访客陈述这个清单的规模与成色，
+  // 不再用「14/16」那种进度条式写法（那是记录者视角，和本页定位相冲）。
   const n = k => GAMES.filter(g=>g.status===k).length;
-  document.getElementById('c-ok').textContent  = n('played');
   document.getElementById('c-all').textContent = GAMES.length;
+  document.getElementById('c-ok').textContent  = n('played');
 }
 render();
 
